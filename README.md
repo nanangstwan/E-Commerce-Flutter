@@ -8,6 +8,8 @@ MySQL sebagai Basis Data: MySQL digunakan untuk menyimpan dan mengelola data yan
 projek ini masih dalam pengerjaan dan pengembangan yang telah sampai dalam login, register dan get data dari API yang selanjutnya untuk pengembangan keranjang, pembayaran dan metode pengiriman 
 ## Screens :
 
+=> Login and Register
+
 => Home
 
 => All Produk
