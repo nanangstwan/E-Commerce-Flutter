@@ -1,19 +1,23 @@
+import 'package:ecommerce/api.dart';
+import 'package:ecommerce/controller/cart_controller.dart';
+import 'package:ecommerce/decoration.dart';
 import 'package:ecommerce/dimensions.dart';
+import 'package:ecommerce/dummy_data.dart';
 import 'package:ecommerce/pages/container.dart';
 import 'package:ecommerce/pages/produk_deskripsi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class DetailPages extends StatelessWidget {
   const DetailPages({
     Key? key,
     required this.dataModel,
   }) : super(key: key);
-  final Map dataModel;
+  final ProdukList dataModel;
 
   @override
   Widget build(BuildContext context) {
-    // print(dataModel);
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -47,7 +51,7 @@ class DetailPages extends StatelessWidget {
             width: 238,
             child: AspectRatio(
               aspectRatio: 1,
-              child: Image.network(dataModel['image']),
+              child: Image.network(API.storageImage + dataModel.gambar),
             ),
           ),
           TopRoundedContainer(
@@ -55,9 +59,9 @@ class DetailPages extends StatelessWidget {
             child: Column(
               children: [
                 DeskripsiProduk(
-                  titleProduk: dataModel['title'],
-                  price: dataModel['price'],
-                  deskripsi: dataModel['deskripsi'],
+                  titleProduk: dataModel.namaBarang,
+                  price: dataModel.harga,
+                  deskripsi: dataModel.deskripsi?? 'Belum ada Deskripsi',
                 )
               ],
             ),
@@ -75,7 +79,9 @@ class DetailPages extends StatelessWidget {
                 SizedBox(
                   width: Dimensions.containerWidth,
                   child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        bottomSheet();
+                      },
                       child: SvgPicture.asset(
                         "assets/icons/Cart Icon.svg",
                         color: Colors.white,
@@ -85,7 +91,7 @@ class DetailPages extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: const Text("Add To Cart"),
+                    child: const Text("Beli Sekarang"),
                   ),
                 ),
               ],
@@ -96,196 +102,59 @@ class DetailPages extends StatelessWidget {
     );
   }
 
-  scroll(BuildContext context) {
-    final Size mediaQuery = MediaQuery.of(context).size;
-    return DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        maxChildSize: 0.9,
-        minChildSize: 0.6,
-        builder: (context, scrollController) {
-          return Container(
-            clipBehavior: Clip.hardEdge,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-              ),
-            ),
-            child: Stack(
+  void bottomSheet() {
+    final quantityController = Get.put(CartController());
+    final price = int.parse(dataModel.harga);
+    final pricequantity = price * quantityController.quantity.value;
+    quantityController.items.value = pricequantity;
+    Get.bottomSheet(
+      backgroundColor: kPrimaryLightColor,
+      Obx(
+        () => Padding(
+          padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+          child: SizedBox(
+            height: Dimensions.containerWidth,
+            child: Column(
               children: [
-                SingleChildScrollView(
-                  controller: scrollController,
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Contoh Nama',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 30,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.location_on_outlined,
-                                  color: Colors.green,
-                                ),
-                                SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    '',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.access_time_outlined,
-                                  color: Colors.green,
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  '08.00 - 16.00 WIB',
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.phone,
-                                  color: Colors.green,
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  '',
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.turned_in_not,
-                                  color: Colors.green,
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  '',
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 20),
-                            Text(
-                              'Deskripsi',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              '',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: Container(
-                              width: mediaQuery.width / 2.6,
-                              height: 55,
-                              decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.green.shade600),
-                                // color: Colors.green.shade600,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(25),
-                                  topRight: Radius.circular(25),
-                                ),
-                              ),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.map_outlined,
-                                    color: Colors.black,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    'Maps',
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 20),
-                                  ),
-                                ],
-                              ),
-                            ),
+                const Text('Konfirmasi'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(quantityController.items.toString()),
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            quantityController.setQuantity(false);
+                          },
+                          child: const Icon(
+                            Icons.remove,
+                            color: kPrimaryColor,
                           ),
-                          InkWell(
-                              onTap: () {},
-                              child: Container(
-                                width: mediaQuery.width / 2.5,
-                                height: 55,
-                                decoration: BoxDecoration(
-                                  color: Colors.green.shade600,
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(25),
-                                    topRight: Radius.circular(25),
-                                  ),
-                                ),
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.chat,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      'WhatsApp',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20),
-                                    ),
-                                  ],
-                                ),
-                              )),
-                        ],
-                      ),
-                    ))
+                        ),
+                        Text(quantityController.quantity.value.toString()),
+                        InkWell(
+                          onTap: () {
+                            quantityController.setQuantity(true);
+                          },
+                          child: const Icon(
+                            Icons.add,
+                            color: kPrimaryColor,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("Masukan Ke Keranjang"),
+                ),
               ],
             ),
-          );
-        });
+          ),
+        ),
+      ),
+    );
   }
 }

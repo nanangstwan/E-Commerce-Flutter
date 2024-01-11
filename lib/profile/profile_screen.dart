@@ -1,8 +1,10 @@
 import 'package:ecommerce/dimensions.dart';
+import 'package:ecommerce/dummy_data.dart';
 import 'package:ecommerce/profile/help_center.dart';
 import 'package:ecommerce/profile/profile_menu.dart';
 import 'package:ecommerce/profile/profile_pic.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -42,11 +44,12 @@ class ProfileScreen extends StatelessWidget {
               text: "Help Center",
               icon: "assets/icons/Question mark.svg",
               press: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) {
-                    return const HelpCenter();
-                  }),
-                );
+                Get.to(() => const HelpCenter());
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(builder: (_) {
+                //     return const HelpCenter();
+                //   }),
+                // );
               },
             ),
             ProfileMenu(

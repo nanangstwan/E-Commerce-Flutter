@@ -1,4 +1,3 @@
-import 'package:ecommerce/decoration.dart';
 import 'package:ecommerce/dimensions.dart';
 import 'package:ecommerce/dummy_data.dart';
 import 'package:flutter/material.dart';

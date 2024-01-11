@@ -1,10 +1,13 @@
+import 'package:ecommerce/controller/cart_controller.dart';
+import 'package:ecommerce/controller/produk_controller.dart';
+import 'package:ecommerce/dummy_data.dart';
 import 'package:ecommerce/init.dart';
 import 'package:ecommerce/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -12,7 +15,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  Get.lazyPut(() => CartController());
+  Get.lazyPut(() => ProdukController());
     return GetMaterialApp(
+      scaffoldMessengerKey: Utils.messagerKey,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme(context),
       home: const InitScreen(),

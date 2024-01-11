@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:ecommerce/api.dart';
 import 'package:ecommerce/decoration.dart';
 import 'package:ecommerce/dimensions.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _MyPageViewState extends State<MyPageView> {
   Future<void> getImageServer() async {
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.12.25/e-commerce/readkonten.php'));
+          .get(Uri.parse(API.readPageView));
       if (response.statusCode == 200) {
         // print(response.body);
         final data = jsonDecode(response.body);
@@ -58,7 +59,7 @@ class _MyPageViewState extends State<MyPageView> {
           _currentPage,
           duration: const Duration(seconds: 1),
           curve: Curves.easeInOut,
-        );  
+        );
       }
     });
   }
@@ -96,9 +97,10 @@ class _MyPageViewState extends State<MyPageView> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: 
-                            NetworkImage(
-                                'http://192.168.12.25/e-commerce/promo/${_images[index]['gambar']}'),
+                        image: NetworkImage(
+                          API.imagePageView + _images[index]['gambar'],
+                        ),
+                        // 'http://192.168.123.34/e-commerce/promo/${_images[index]['gambar']}'),
                         fit: BoxFit.cover,
                       ),
                       color: kSecondaryColor.withOpacity(0.1),

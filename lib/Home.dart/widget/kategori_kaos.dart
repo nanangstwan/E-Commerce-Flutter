@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ecommerce/api.dart';
+import 'package:ecommerce/decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,7 +23,7 @@ class _CategoryKaosState extends State<CategoryKaos> {
   Future<void> _getData() async {
     try {
       http.Response response = await http.get(
-        Uri.parse('http://192.168.12.25/e-commerce/readkategori1.php'),
+        Uri.parse(API.getKaos),
       );
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = json.decode(response.body);
@@ -46,7 +48,7 @@ class _CategoryKaosState extends State<CategoryKaos> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? const CircularProgressIndicator()
+        ? const Center(child:  CircularProgressIndicator())
         : SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -56,7 +58,7 @@ class _CategoryKaosState extends State<CategoryKaos> {
                         nama: dataFromAPI[index].namaBarang,
                         harga: dataFromAPI[index].harga,
                         image:
-                            'http://192.168.12.25/e-commerce/p/${dataFromAPI[index].gambar}',
+                            API.storageImage + dataFromAPI[index].gambar,
                       )),
             ),
           );

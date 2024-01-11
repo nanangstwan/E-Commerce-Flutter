@@ -26,7 +26,7 @@ class _InitScreenState extends State<InitScreen> {
 
   final pages = [
     const MyHome(),
-    const MyProduk(),
+    MyAllProduk(),
     const MyKeranjang(),
     const ProfileScreen(),
   ];

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 enum SizeOption { M, L, XL, XXL }
 
 // To parse this JSON data, do
@@ -48,4 +50,17 @@ class ProdukList {
         "id_kategori": idKategori,
         "gambar": gambar,
     };
+}
+
+class Utils {
+  static GlobalKey<ScaffoldMessengerState> messagerKey = GlobalKey<ScaffoldMessengerState>();
+  static showSnackBar(String? text) {
+    if (text == null) return;
+
+    final snackBar = SnackBar(content: Text(text), backgroundColor: Colors.red);
+    messagerKey.currentState!
+    ..removeCurrentSnackBar()
+    ..showSnackBar(snackBar);
+  
+  }
 }

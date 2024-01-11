@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ecommerce/api.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,7 +22,7 @@ class _CategorySepatuState extends State<CategorySepatu> {
   Future<void> _getData() async {
     try {
       http.Response response = await http.get(
-        Uri.parse('http://192.168.12.25/e-commerce/readkategori5.php'),
+        Uri.parse(API.getSepatu),
       );
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = json.decode(response.body);
@@ -46,17 +47,16 @@ class _CategorySepatuState extends State<CategorySepatu> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? const CircularProgressIndicator()
+        ? const Center(child: CircularProgressIndicator())
         : SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List.generate(
                   dataFromAPI.length,
                   (index) => ProdukCard(
-                        nama: dataFromAPI[index].namaBarang,
-                        harga: dataFromAPI[index].harga,
-                        image:
-                            'http://192.168.12.25/e-commerce/p/${dataFromAPI[index].gambar}',
+                      nama: dataFromAPI[index].namaBarang,
+                      harga: dataFromAPI[index].harga,
+                      image: API.storageImage + dataFromAPI[index].gambar,
                       )),
             ),
           );

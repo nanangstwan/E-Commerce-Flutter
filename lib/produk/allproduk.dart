@@ -1,50 +1,16 @@
-import 'dart:convert';
-
 import 'package:ecommerce/Home.dart/component/produk_card.dart';
 import 'package:ecommerce/Home.dart/component/search.dart';
+import 'package:ecommerce/api.dart';
+import 'package:ecommerce/controller/produk_controller.dart';
 import 'package:ecommerce/decoration.dart';
-import 'package:ecommerce/dummy_data.dart';
 import 'package:ecommerce/pages/detail_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
 
-class MyProduk extends StatefulWidget {
-  const MyProduk({super.key});
-
-  @override
-  State<MyProduk> createState() => _MyProdukState();
-}
-
-class _MyProdukState extends State<MyProduk> {
-  bool isLoading = true;
-
-  List<ProdukList> dataFromAPI = []; // Menyimpan list dari objek ProdukList
-
-  Future<void> _getData() async {
-    try {
-      http.Response response = await http.get(
-        Uri.parse('http://192.168.12.25/e-commerce/read.php'),
-      );
-      if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = json.decode(response.body);
-        // print(response.body);
-        // Mengonversi list JSON menjadi list dari objek ProdukList
-        dataFromAPI =
-            jsonResponse.map((json) => ProdukList.fromJson(json)).toList();
-        isLoading = false;
-        setState(() {});
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
-  @override
-  void initState() {
-    _getData();
-    super.initState();
-  }
+class MyAllProduk extends StatelessWidget {
+  MyAllProduk({super.key});
+  final ProdukController myController = Get.find<ProdukController>();
 
   @override
   Widget build(BuildContext context) {
@@ -70,47 +36,41 @@ class _MyProdukState extends State<MyProduk> {
           ),
         ),
       ]),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
+      body: Obx(
+        () {
+          if (myController.allProduk.isEmpty) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return Padding(
               padding: const EdgeInsets.only(left: 20, top: 20),
               child: GridView.count(
                 crossAxisSpacing: 2.0,
                 crossAxisCount: 2,
                 childAspectRatio: 2 / 2.5,
                 children: List.generate(
-                  dataFromAPI.length,
+                  myController.allProduk.length,
                   (index) => InkWell(
                     onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) {
-                        ProdukList produk = dataFromAPI[index];
-                        return DetailPages(
-                          dataModel: {
-                            'image':
-                                'http://192.168.12.25/e-commerce/p/${produk.gambar} ',
-                            'title': produk.namaBarang.toString(),
-                            'price': produk.harga.toString(),
-                            'deskripsi': produk.deskripsi.toString()
-                          },
-                        );
-                      }));
+                      Get.to(
+                        () => DetailPages(
+                          dataModel: myController.allProduk[index],
+                        ),
+                      );
                     },
                     child: ProdukCard(
-                        image:
-                            'http://192.168.12.25/e-commerce/p/${dataFromAPI[index].gambar}',
-                        nama: dataFromAPI[index].namaBarang,
-                        harga: dataFromAPI[index].harga),
+                        image: API.storageImage +
+                            myController.allProduk[index].gambar,
+                        nama: myController.allProduk[index].namaBarang,
+                        harga: myController.allProduk[index].harga),
                   ),
                 ),
               ),
-
-              // ListView.builder(
-              //     itemCount: _listData.length,
-              //     itemBuilder: (context, index) {
-              //       return ProdukCard();
-              //     }),
-            ),
+            );
+          }
+        },
+      ),
     );
   }
 }

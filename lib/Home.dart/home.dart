@@ -4,10 +4,12 @@ import 'package:ecommerce/Home.dart/component/section_title.dart';
 import 'package:ecommerce/Home.dart/component/pageview.dart';
 import 'package:ecommerce/Home.dart/widget/kategori_kaos.dart';
 import 'package:ecommerce/Home.dart/widget/kategori_sepatu.dart';
+import 'package:ecommerce/cart/cart_screen.dart';
 import 'package:ecommerce/decoration.dart';
 import 'package:ecommerce/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class MyHome extends StatefulWidget {
   const MyHome({super.key});
@@ -36,8 +38,13 @@ class _MyHomeState extends State<MyHome> {
             color: kSecondaryColor.withOpacity(0.1),
             shape: BoxShape.circle,
           ),
-          child: SvgPicture.asset(
-            "assets/icons/Cart Icon.svg",
+          child: InkWell(
+            onTap: () {
+              Get.to(() => const CartScreen());
+            },
+            child: SvgPicture.asset(
+              "assets/icons/Cart Icon.svg",
+            ),
           ),
         ),
       ]),

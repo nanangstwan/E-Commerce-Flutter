@@ -27,7 +27,7 @@ class DeskripsiProduk extends StatelessWidget {
           ),
           SizedBox(height: Dimensions.height10),
           Text(
-            '\$$price',
+            'RP.$price',
             style: Theme.of(context).textTheme.titleLarge,
           ),
           SizedBox(height: Dimensions.height20),
